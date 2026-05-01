@@ -101,7 +101,7 @@ app.post('/api/lookup', async (req, res) => {
 });
 
 // Fallback for SPA/HTML routing (only locally)
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
