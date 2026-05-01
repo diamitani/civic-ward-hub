@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Ward Hub | 48th Ward</title>
+    <style>
+        /* Typography & Colors based on 48th Ward Brand Guidelines */
+        :root {
+            --sig-blue: #0099D8;
+            --bright-cyan: #08B9EC;
+            --deep-blue: #0967A6;
+            --chicago-red: #ED1D27;
+            --bg-light: #F4F8FB;
+            --text-main: #333333;
+        }
+
+        body {
+            font-family: "Halyard Display", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #FFFFFF;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid var(--chicago-red);
+        }
+
+        .logo {
+            height: 60px;
+            object-fit: contain;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            color: var(--deep-blue);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--sig-blue);
+        }
+
+        .btn-primary {
+            background-color: var(--sig-blue);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--deep-blue);
+        }
+
+        .loader {
+            display: none;
+            margin: 2rem auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--chicago-red);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Container */
+        #results {
+            display: none;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-top: 2rem;
+        }
+
+        .result-header {
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-header h2 {
+            color: var(--sig-blue);
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+
+        .alderperson-card {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--chicago-red);
+        }
+
+        .alderperson-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--deep-blue);
+            font-size: 1.5rem;
+        }
+
+        .info p {
+            margin: 0.25rem 0;
+        }
+
+        .info a {
+            color: var(--sig-blue);
+            text-decoration: none;
+        }
+
+        .info a:hover {
+            text-decoration: underline;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .list-card {
+            background: white;
+            border: 1px solid #eaeaea;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .list-card h4 {
+            color: var(--deep-blue);
+            margin-top: 0;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 0.5rem;
+        }
+
+        .list-item {
+            margin-bottom: 1rem;
+        }
+
+        .list-item strong {
+            display: block;
+            color: var(--sig-blue);
+        }
+
+        .error-message {
+            color: var(--chicago-red);
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="/assets/leni-48th-ward-logo.png" alt="48th Ward Leni Manaa-Hoppenworth" class="logo">
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Know Your Ward</h1>
+            <p>Enter your Chicago address to see your ward, alderperson, and elected officials. Empowering constituents with civic data.</p>
+            
+            <form id="lookup-form" class="search-box">
+                <input type="text" id="address-input" placeholder="e.g. 1129 W Bryn Mawr Ave" required>
+                <button type="submit" class="btn-primary">Look Up</button>
+            </form>
+            <div id="error" class="error-message"></div>
+        </div>
+
+        <div id="loader" class="loader"></div>
+
+        <div id="results">
+            <div class="result-header">
+                <h2>Ward <span id="ward-number">--</span></h2>
+                <p><strong>Matched Address:</strong> <span id="matched-address"></span></p>
+            </div>
+
+            <div id="alderperson-container" class="alderperson-card">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="grid">
+                <div class="list-card">
+                    <h4>Other Officials</h4>
+                    <div id="officials-list"></div>
+                </div>
+                <div class="list-card">
+                    <h4>Civic Activity (Sample)</h4>
+                    <div id="events-list"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Civic Ward Hub System &bull; Inspired by CivicPie &bull; Internal 48th Ward Data
+    </footer>
+
+    <script>
+        document.getElementById('lookup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const address = document.getElementById('address-input').value;
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results');
+            const errorDiv = document.getElementById('error');
+            const btn = document.querySelector('.btn-primary');
+
+            // Reset UI
+            errorDiv.style.display = 'none';
+            results.style.display = 'none';
+            loader.style.display = 'block';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/lookup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to lookup address');
+                }
+
+                // Populate UI
+                document.getElementById('ward-number').textContent = data.ward;
+                document.getElementById('matched-address').textContent = data.address;
+
+                // Alderperson
+                const ald = data.alderperson;
+                if (ald) {
+                    const imgTag = ald.photo_url ? `<img src="${ald.photo_url}" alt="${ald.name}">` : '';
+                    document.getElementById('alderperson-container').innerHTML = `
+                        ${imgTag}
+                        <div class="info">
+                            <h3>${ald.name}</h3>
+                            <p><strong>${ald.title}, Ward ${ald.ward}</strong></p>
+                            <p>📞 <a href="tel:${ald.phone}">${ald.phone || 'N/A'}</a></p>
+                            <p>✉️ <a href="mailto:${ald.email}">${ald.email || 'N/A'}</a></p>
+                            <p>📍 ${ald.address || 'N/A'}</p>
+                            ${ald.website ? `<p>🌐 <a href="${ald.website}" target="_blank">Website</a></p>` : ''}
+                        </div>
+                    `;
+                }
+
+                // Officials
+                document.getElementById('officials-list').innerHTML = data.officials.map(o => `
+                    <div class="list-item">
+                        <strong>${o.title}</strong>
+                        ${o.name} <span style="font-size: 0.85em; color: #777;">(${o.level})</span>
+                    </div>
+                `).join('');
+
+                // Events
+                document.getElementById('events-list').innerHTML = data.events.map(e => `
+                    <div class="list-item">
+                        <strong>${e.title}</strong>
+                        ${e.date} &bull; ${e.location}
+                    </div>
+                `).join('');
+
+                results.style.display = 'block';
+
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
